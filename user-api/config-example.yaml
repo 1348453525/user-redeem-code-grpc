@@ -1,0 +1,48 @@
+# 项目启动端口
+server:
+  name: user-api
+  tags:
+    - user-api
+  version: v0.0.1
+  mode: dev # release, dev
+  addr: 127.0.0.1
+  port: 8080
+
+# 数据库配置
+mysql:
+  driver: mysql
+  # dsn: root:root@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: 123456
+  db: user_redeem_code
+  charset: utf8mb4
+  max_idle_conns: 10 # 最大空闲连接数
+  max_open_conns: 100 # 最大连接数
+
+# redis 配置
+redis:
+  addr: 127.0.0.1:6379
+  password:
+
+# consul 配置
+consul:
+  host: 127.0.0.1
+  port: 8500
+
+# nacos 配置
+nacos:
+  host: 127.0.0.1
+  port: 8848
+  namespace: 05ebc0c8-bd21-4534-9dd7-b1d3e0a279d1
+  user: nacos
+  password: nacos
+  data_id: user-srv
+  group: pro
+
+# user srv 配置
+user_srv:
+  name: user-srv
+  address: 127.0.0.1
+  port: 8070
