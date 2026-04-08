@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package proto;
+package user;
 
-option go_package = "github.com/1348453525/user-redeem-code-grpc/user-srv/user/proto;proto";
+option go_package = "github.com/1348453525/user-redeem-code-grpc/user-srv/proto/user;proto";
 
 import "google/protobuf/empty.proto";
 

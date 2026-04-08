@@ -61,4 +61,5 @@ func init() {
 	// 初始化 grpc 客户端
 	// initialize.InitGrpcUserClient()
 	initialize.InitGrpcUserClientUseLB()
+	initialize.InitGrpcRedeemCodeClientUseLB()
 }

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/1348453525/user-redeem-code-grpc/user-api/global"
+	rcproto "github.com/1348453525/user-redeem-code-grpc/user-api/proto/redeem_code"
 	proto "github.com/1348453525/user-redeem-code-grpc/user-api/proto/user"
 	"github.com/hashicorp/consul/api"
 	_ "github.com/mbobakov/grpc-consul-resolver"
@@ -31,23 +32,58 @@ func InitGrpcUserClientUseLB() {
 	)
 	if err != nil {
 		zap.S().Errorw(
-			"[InitClient] 连接 【用户服务失败】",
+			fmt.Sprintf("[InitClient] 连接 【%s服务失败】", global.Config.UserSrv.Name),
 			"err", err.Error(),
 		)
 	}
 
 	// 健康检查
-	if !HealthCheck(conn) {
+	if !HealthCheck(conn, global.Config.UserSrv.Name) {
 		zap.S().Errorw(
 			"[InitClient] 【健康检查失败】",
 			"service", global.Config.UserSrv.Name,
 		)
 	} else {
-		zap.S().Info("[InitClient] 链接【用户服务成功】")
+		zap.S().Infof("[InitClient] 链接【%s服务成功】", global.Config.UserSrv.Name)
 	}
 
 	// 创建 grpc 客户端
 	global.UserClient = proto.NewUserClient(conn)
+}
+
+// 初始化 grpc 客户端
+func InitGrpcRedeemCodeClientUseLB() {
+	// 连接 grpc 服务端
+	target := fmt.Sprintf(
+		"consul://%s:%d/%s?wait=10s",
+		global.Config.Consul.Host,
+		global.Config.Consul.Port,
+		global.Config.RedeemCodeSrv.Name,
+	)
+	conn, err := grpc.Dial(
+		target,
+		grpc.WithInsecure(),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+	)
+	if err != nil {
+		zap.S().Errorw(
+			fmt.Sprintf("[InitClient] 连接 【%s服务失败】", global.Config.RedeemCodeSrv.Name),
+			"err", err.Error(),
+		)
+	}
+
+	// 健康检查
+	if !HealthCheck(conn, global.Config.RedeemCodeSrv.Name) {
+		zap.S().Errorw(
+			"[InitClient] 【健康检查失败】",
+			"service", global.Config.UserSrv.Name,
+		)
+	} else {
+		zap.S().Infof("[InitClient] 链接【%s服务成功】", global.Config.RedeemCodeSrv.Name)
+	}
+
+	// 创建 grpc 客户端
+	global.RedeemCodeClient = rcproto.NewRedeemCodeClient(conn)
 }
 
 // 初始化 grpc 客户端
@@ -73,7 +109,7 @@ func InitGrpcUserClient() {
 	}
 
 	// 健康检查
-	if !HealthCheck(conn) {
+	if !HealthCheck(conn, global.Config.UserSrv.Name) {
 		zap.S().Errorw(
 			"[InitClient] 【健康检查失败】",
 			"service", global.Config.UserSrv.Name,
@@ -87,7 +123,7 @@ func InitGrpcUserClient() {
 }
 
 // 健康检查
-func HealthCheck(conn *grpc.ClientConn) bool {
+func HealthCheck(conn *grpc.ClientConn, name string) bool {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -100,7 +136,7 @@ func HealthCheck(conn *grpc.ClientConn) bool {
 		return false
 	}
 
-	zap.S().Infof("[HealthCheck] 服务【%s】状态正常", global.Config.UserSrv.Name)
+	zap.S().Infof("[HealthCheck] 服务【%s】状态正常", name)
 	return true
 }
 

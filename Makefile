@@ -6,24 +6,24 @@ GOPATH:=$(shell go env GOPATH)
 tidy:
 	go mod tidy
 
-USER_SRV_PROTO_DIR=./user-srv/proto/user
-USER_SRV_PROTO_FILES=$(shell find $(USER_SRV_PROTO_DIR) -name *.proto)
-USER_SRV_PROTO_OUT_DIR=./user-srv/proto/user
+PROTO_DIR=./user-srv/proto
+PROTO_FILES=$(shell find $(PROTO_DIR) -name *.proto)
+PROTO_OUT_DIR=./user-srv/proto
 
-.PHONY: user-srv-proto
-# 生成 user-srv 的 proto 及 grpc 代码
-user-srv-proto:
+.PHONY: pb
+# 生成 proto 及 grpc 代码
+pb:
 	protoc \
-	--proto_path=$(USER_SRV_PROTO_DIR) \
-	--go_out=$(USER_SRV_PROTO_OUT_DIR) \
+	--proto_path=$(PROTO_DIR) \
+	--go_out=$(PROTO_OUT_DIR) \
 	--go_opt=paths=source_relative \
-	--go-grpc_out=$(USER_SRV_PROTO_OUT_DIR) \
+	--go-grpc_out=$(PROTO_OUT_DIR) \
 	--go-grpc_opt=paths=source_relative \
-	$(USER_SRV_PROTO_FILES)
+	$(PROTO_FILES)
 
 help:
 	@echo "make help - 显示帮助信息"
 	@echo "make tidy - go mod tidy"
-	@echo "make user-srv-proto - 生成 user-srv 的 proto 及 grpc 代码"
+	@echo "make pb - 生成 proto 及 grpc 代码"
 
 .DEFAULT_GOAL := help

@@ -1,12 +1,12 @@
 # 项目启动端口
 server:
-  name: user-api
+  name: user-srv
   tags:
-    - user-api
+    - user-srv
   version: v0.0.1
   mode: dev # release, dev
   addr: 127.0.0.1
-  port: 8080
+  port: 8070
 
 # 数据库配置
 mysql:
@@ -40,15 +40,3 @@ nacos:
   password: nacos
   data_id: user-srv
   group: pro
-
-# user srv 配置
-user_srv:
-  name: user-srv
-  address: 127.0.0.1
-  port: 8070
-
-# redeem code srv 配置
-redeem_code_srv:
-  name: redeem-code-srv
-  address: 192.168.50.102
-  port: 8071

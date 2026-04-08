@@ -1,13 +1,11 @@
 package config
 
 type Config struct {
-	Server        Server        `mapstructure:"server" json:"server"`
-	MySQL         MySQL         `mapstructure:"mysql" json:"mysql"`
-	Redis         Redis         `mapstructure:"redis" json:"redis"`
-	Consul        Consul        `mapstructure:"consul" json:"consul"`
-	Nacos         Nacos         `mapstructure:"nacos" json:"nacos"`
-	UserSrv       UserSrv       `mapstructure:"user_srv" json:"user_srv"`
-	RedeemCodeSrv RedeemCodeSrv `mapstructure:"redeem_code_srv" json:"redeem_code_srv"`
+	Server Server `mapstructure:"server" json:"server"`
+	MySQL  MySQL  `mapstructure:"mysql" json:"mysql"`
+	Redis  Redis  `mapstructure:"redis" json:"redis"`
+	Consul Consul `mapstructure:"consul" json:"consul"`
+	Nacos  Nacos  `mapstructure:"nacos" json:"nacos"`
 }
 
 type Server struct {
@@ -48,16 +46,4 @@ type Nacos struct {
 	Password  string `mapstructure:"password" json:"password"`
 	DataId    string `mapstructure:"data_id" json:"data_id"`
 	Group     string `mapstructure:"group" json:"group"`
-}
-
-type UserSrv struct {
-	Name    string `mapstructure:"name" json:"name"`
-	Address string `mapstructure:"address" json:"address"`
-	Port    int    `mapstructure:"port" json:"port"`
-}
-
-type RedeemCodeSrv struct {
-	Name    string `mapstructure:"name" json:"name"`
-	Address string `mapstructure:"address" json:"address"`
-	Port    int    `mapstructure:"port" json:"port"`
 }
